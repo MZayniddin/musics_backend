@@ -8,7 +8,7 @@ dotenv.config();
 
 // ROUTES
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const musicRouter = require("./routes/music");
 // EXPRESS INIT
 const app = express();
 
@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/api/music", musicRouter);
 
 // CATCH 404 and forward to error handler
 app.use((req, res, next) => {
