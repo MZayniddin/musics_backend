@@ -47,4 +47,16 @@ router.get("/:musicId", async (req, res, next) => {
   }
 });
 
+// UPDATE MUSIC
+router.put("/update/:musicId", async (req, res, next) => {
+  try {
+    const result = await Music.findByIdAndUpdate(req.params.musicId, req.body, {
+      new: true,
+    });
+    res.status(200).json(result);
+  } catch (err) {
+    next({ message: "Music Not Found!", status: 404 });
+  }
+});
+
 module.exports = router;
