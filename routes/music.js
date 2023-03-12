@@ -37,5 +37,14 @@ router.post("/create", (req, res) => {
   }
 });
 
+// GET ONE MUSIC
+router.get("/:musicId", async (req, res, next) => {
+  try {
+    const result = await Music.findById(req.params.musicId);
+    res.status(200).json(result);
+  } catch (err) {
+    next({ message: "Music Not Found", status: 404 });
+  }
+});
 
 module.exports = router;
