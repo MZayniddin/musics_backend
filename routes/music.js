@@ -73,6 +73,19 @@ router.delete("/destroy/:musicId", async (req, res, next) => {
   }
 });
 
+// GET TOP 10 MUSIC
+router.get("/top/:limit", async (req, res, next) => {
+  try {
+    const result = await Music.find()
+      .sort({ spotify_score: -1 })
+      .limit(req.params.limit);
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+    next({ message: err.message });
+  }
+});
+
 // MUSIC BETWEEN TWO YEARS
 router.get("/between/:start_year/:end_year", async (req, res, next) => {
   try {
