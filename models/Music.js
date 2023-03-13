@@ -11,6 +11,10 @@ const MusicSchema = new Schema({
   country: String,
   year: Number,
   spotify_score: Number,
+  created_time: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model("music", MusicSchema);
