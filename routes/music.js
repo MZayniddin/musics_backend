@@ -73,4 +73,17 @@ router.delete("/destroy/:musicId", async (req, res, next) => {
   }
 });
 
+// MUSIC BETWEEN TWO YEARS
+router.get("/between/:start_year/:end_year", async (req, res, next) => {
+  try {
+    const { start_year, end_year } = req.params;
+    const result = await Music.find({
+      year: { $gte: parseInt(start_year), $lte: parseInt(end_year) },
+    });
+    res.json(result);
+  } catch {
+    next({ message: "Music Not Found!", status: 404 });
+  }
+});
+
 module.exports = router;
