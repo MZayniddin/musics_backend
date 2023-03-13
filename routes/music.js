@@ -59,4 +59,18 @@ router.put("/update/:musicId", async (req, res, next) => {
   }
 });
 
+// REMOVE MUSIC
+router.delete("/destroy/:musicId", async (req, res, next) => {
+  try {
+    const result = await Music.findOneAndRemove({ _id: req.params.musicId });
+    if (!result) {
+      next({ message: "Music Not Found!", status: 404 });
+    } else {
+      res.json(result);
+    }
+  } catch {
+    next({ message: "Music Not Found!", status: 404 });
+  }
+});
+
 module.exports = router;
