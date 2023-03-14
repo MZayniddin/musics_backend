@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 
 // MODEL
@@ -14,25 +15,50 @@ router.post("/create", (req, res) => {
   }
 });
 
-// GET AUTHORS WITH MISUC
-router.get("/", async (req, res) => {
-  const result = await Author.aggregate([
-    {
-      $lookup: {
-        from: "musics",
-        localField: "_id",
-        foreignField: "author_id",
-        as: "musics", // give name
+// GET MUSIC BY AUTHOR ID
+router.get("/:author_id", async (req, res) => {
+  try {
+    const result = await Author.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(req.params.author_id),
+        },
       },
-    },
-    {
-      $unwind: {
-        path: "$musics", // given name
-        preserveNullAndEmptyArrays: true
+      {
+        $lookup: {
+          from: "musics",
+          localField: "_id",
+          foreignField: "author_id",
+          as: "musics", // give name
+        },
       },
-    },
-  ]);
-  res.json(result);
+      {
+        $unwind: {
+          path: "$musics", // given name
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ]);
+    res.json(result);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
+// UPDATE AUTHOR BY ID
+router.put("/update/:author_id", async (req, res) => {
+  try {
+    const result = await Author.findByIdAndUpdate(
+      req.params.author_id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    res.json(result);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
 });
 
 module.exports = router;
