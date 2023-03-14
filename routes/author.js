@@ -14,4 +14,25 @@ router.post("/create", (req, res) => {
   }
 });
 
+// GET AUTHORS WITH MISUC
+router.get("/", async (req, res) => {
+  const result = await Author.aggregate([
+    {
+      $lookup: {
+        from: "musics",
+        localField: "_id",
+        foreignField: "author_id",
+        as: "musics", // give name
+      },
+    },
+    {
+      $unwind: {
+        path: "$musics", // given name
+        preserveNullAndEmptyArrays: true
+      },
+    },
+  ]);
+  res.json(result);
+});
+
 module.exports = router;
