@@ -5,6 +5,17 @@ const router = express.Router();
 // MODEL
 const Author = require("../models/Author");
 
+// DELETE AUTHOR
+router.delete("/destroy/:author_id", async (req, res) => {
+  try {
+    const result = await Author.findByIdAndRemove(req.params.author_id);
+    if (!result) return res.json({ message: "Authour Not Found!" });
+    res.json({ message: "Successfully deleted!" });
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
 // ADD AUTHOR
 router.post("/create", (req, res) => {
   try {
@@ -57,7 +68,7 @@ router.put("/update/:author_id", async (req, res) => {
     );
     res.json(result);
   } catch (err) {
-    res.json({ message: err.message });
+    res.json({ message: "Author Not Found" });
   }
 });
 
