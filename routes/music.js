@@ -7,10 +7,22 @@ const Music = require("../models/Music");
 // GET ALL MUSICS
 router.get("/all", async (req, res) => {
   try {
-    const result = await Music.find();
+    const result = await Music.aggregate([
+      {
+        $lookup: {
+          from: "authors",
+          localField: "author_id",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $unwind: "$author",
+      },
+    ]);
     res.json(result);
   } catch (err) {
-    res.send(err.message);
+    res.send({ message: err.message });
   }
 });
 
